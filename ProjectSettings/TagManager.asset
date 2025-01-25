@@ -8,6 +8,7 @@ TagManager:
   - BubbleVial
   - BubbleMachine
   - AttackBubble
+  - BubbleWall
   layers:
   - Default
   - TransparentFX

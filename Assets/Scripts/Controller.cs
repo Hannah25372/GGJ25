@@ -28,6 +28,7 @@ public class Controller : MonoBehaviour
     public Controller opponent;
 
     public GameObject bubbleMachine;
+    public GameObject BubbleWall;
     public bool carrying = false;
 
     public TextMeshProUGUI healthText;
@@ -153,8 +154,7 @@ public class Controller : MonoBehaviour
         if (phase == Phase.One && carrying)
         {
             //place bubble machine
-            bubbleMachine.transform.position = new Vector2(transform.position.x + aimHorizontal, transform.position.y + aimVertical);
-            bubbleMachine.SetActive(true);
+            GameObject newObject = Instantiate(BubbleWall, new Vector2(transform.position.x + aimHorizontal, transform.position.y + aimVertical), Quaternion.identity);
             carrying = false;
 
         }
