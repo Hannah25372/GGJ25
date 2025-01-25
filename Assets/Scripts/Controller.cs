@@ -25,8 +25,13 @@ public class Controller : MonoBehaviour
 
     public Controller opponent;
 
+    public GameObject bubbleMachine;
+    public string bubbleMachineName;
+    public bool carrying = false;
+
     public TextMeshProUGUI healthText;
-    
+    public TextMeshProUGUI attackText;
+
     enum Phase { One = 1, Two = 2}
     Phase phase;
 
@@ -38,6 +43,14 @@ public class Controller : MonoBehaviour
         bullet.SetActive(false);
         phase = Phase.One;
         healthText.text = "Health: " + health.ToString();
+        attackText.text = "Attack: " + attackDamage.ToString();
+    }
+
+    private void StartPhaseTwo()
+    {
+        phase = Phase.Two;
+        //remove wall
+        //remove any uncollected items
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -47,17 +60,26 @@ public class Controller : MonoBehaviour
         {
             TakeDamage();
         } 
-        else if (collision.gameObject.CompareTag("BubbleVial"))
-        {
-
-
-        }
         else if (collision.gameObject.CompareTag("BubbleMachine") && phase==Phase.One)
         {
-
-
+            //pick up bubble machine
         }
+    }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("BubbleVial"))
+        {
+            health += 1;
+            healthText.text = "Health: " + health.ToString();
+            collision.gameObject.SetActive(false);
+        }
+        if (collision.gameObject.CompareTag("AttackBubble"))
+        {
+            attackDamage += 1;
+            attackText.text = "Attack: " + attackDamage.ToString();
+            collision.gameObject.SetActive(false);
+        }
     }
 
     private void TakeDamage()
@@ -85,9 +107,6 @@ public class Controller : MonoBehaviour
 
     }
 
-    void Update()
-    {
-    }
 
     private void OnMove(InputValue value)
     {
@@ -105,7 +124,7 @@ public class Controller : MonoBehaviour
     {
         if (phase == Phase.One)
         {
-            //place item
+            //place bubble machine
 
         }
         if (phase == Phase.Two)
