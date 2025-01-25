@@ -1,18 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class Controller : MonoBehaviour
 {
     Rigidbody2D body;
-
+    public Vector2 move;
     public float horizontal;
     public float vertical;
+
     float moveLimiter = 0.7f;
-
-    public float aimHorizontal;
-    public float aimVertical;
-
     public float speed = 2f;
 
     // Start is called before the first frame update
@@ -24,18 +22,6 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Gives a value between -1 and 1
-        horizontal = Input.GetAxis("LSHorizontal");
-        vertical = Input.GetAxis("LSVertical");
-
-        aimHorizontal = Input.GetAxis("RSHorizontal");
-        aimVertical = Input.GetAxis("RSVertical");
-
-
-    }
-
-    private void FixedUpdate()
-    {
         if (horizontal != 0 && vertical != 0) // Check for diagonal movement
         {
             // limit movement speed diagonally, so you move at 70% speed
@@ -44,6 +30,14 @@ public class Movement : MonoBehaviour
 
         }
         body.velocity = new Vector2(horizontal * speed, vertical * speed);
-        
     }
+
+    private void OnMove(InputValue value)
+    {
+        horizontal = value.Get<Vector2>().x;
+        vertical = value.Get<Vector2>().y;
+
+    }
+
+
 }
