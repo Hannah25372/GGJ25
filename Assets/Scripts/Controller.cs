@@ -13,6 +13,7 @@ public class Controller : MonoBehaviour
     float moveLimiter = 0.7f;
     public float speed = 2f;
     public bool dead = false;
+    public bool freeze = false;
 
     public int health = 5;
     public int attackDamage = 1;
@@ -26,11 +27,14 @@ public class Controller : MonoBehaviour
     public Controller opponent;
 
     public GameObject bubbleMachine;
-    public string bubbleMachineName;
     public bool carrying = false;
 
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI attackText;
+    public TextMeshProUGUI phaseTwoText;
+
+    public GameObject bubbleMixes;
+    public GameObject wall;
 
     enum Phase { One = 1, Two = 2}
     Phase phase;
@@ -44,13 +48,24 @@ public class Controller : MonoBehaviour
         phase = Phase.One;
         healthText.text = "Health: " + health.ToString();
         attackText.text = "Attack: " + attackDamage.ToString();
+        phaseTwoText.enabled = false;
+
+        Invoke(nameof(StartPhaseTwo), 60f);
+        Invoke(nameof(Hide), 65f);
     }
 
     private void StartPhaseTwo()
     {
         phase = Phase.Two;
-        //remove wall
-        //remove any uncollected items
+        phaseTwoText.enabled = true;
+        freeze = true;
+        bubbleMixes.SetActive(false);
+        wall.SetActive(false);
+    }
+    private void Hide()
+    {
+        phaseTwoText.enabled = false;
+        freeze = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -60,9 +75,12 @@ public class Controller : MonoBehaviour
         {
             TakeDamage();
         } 
-        else if (collision.gameObject.CompareTag("BubbleMachine") && phase==Phase.One)
+        else if (collision.gameObject.CompareTag("BubbleMachine") && phase==Phase.One && !carrying)
         {
             //pick up bubble machine
+            bubbleMachine = collision.gameObject;
+            carrying = true;
+            collision.gameObject.SetActive(false);
         }
     }
 
@@ -98,13 +116,16 @@ public class Controller : MonoBehaviour
     void FixedUpdate()
     {
         //movement
-        if (horizontal != 0 && vertical != 0) // Check for diagonal movement
+        if (!freeze)
         {
-            horizontal *= moveLimiter;
-            vertical *= moveLimiter;
+             if (horizontal != 0 && vertical != 0) // Check for diagonal movement
+             {
+                horizontal *= moveLimiter;
+                vertical *= moveLimiter;
+             }
+             body.velocity = new Vector2(horizontal * speed, vertical * speed);
         }
-        body.velocity = new Vector2(horizontal * speed, vertical * speed);
-
+       
     }
 
 
@@ -122,9 +143,15 @@ public class Controller : MonoBehaviour
 
     private void OnFire(InputValue value)
     {
-        if (phase == Phase.One)
+        if (freeze)
+            return;
+
+        if (phase == Phase.One && carrying)
         {
             //place bubble machine
+            bubbleMachine.transform.position = new Vector2(transform.position.x + aimHorizontal, transform.position.y + aimVertical);
+            bubbleMachine.SetActive(true);
+            carrying = false;
 
         }
         if (phase == Phase.Two)
