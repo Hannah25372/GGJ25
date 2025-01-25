@@ -16,6 +16,6 @@ public class AimPointer : MonoBehaviour
 
     void FixedUpdate()
     {
-
+        transform.localPosition = new Vector2(aimHorizontal, aimVertical);
     }
 }
