@@ -23,6 +23,7 @@ public class Controller : MonoBehaviour
     public float aimHorizontal;
     public float aimVertical;
     public float bulletSpeed = 4f;
+    public GameObject aimPointer;
 
     public Controller opponent;
 
@@ -125,7 +126,10 @@ public class Controller : MonoBehaviour
              }
              body.velocity = new Vector2(horizontal * speed, vertical * speed);
         }
-       
+
+        //aim
+        aimPointer.transform.localPosition = new Vector2(aimHorizontal, aimVertical);
+
     }
 
 
