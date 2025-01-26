@@ -32,8 +32,9 @@ public class Controller : MonoBehaviour
 
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI attackText;
-    public TextMeshProUGUI phaseTwoText;
     public TextMeshProUGUI wallsText;
+    public TextMeshProUGUI phaseTwoText;
+    public TextMeshProUGUI gameOverText;
 
     public GameObject bubbleMixes;
     public GameObject wall;
@@ -112,6 +113,11 @@ public class Controller : MonoBehaviour
         {
             health = 0;
             dead = true;
+            phase = Phase.Two;
+            phaseTwoText.enabled = true;
+            freeze = true;
+            bubbleMixes.SetActive(false);
+            wall.SetActive(false);
         }
         //update UI
         healthText.text = "Health: " + health.ToString();
@@ -185,4 +191,4 @@ public class Controller : MonoBehaviour
 //don't spawn walls on top of player
 //nicer background
 // gameover when health is zero and back to main menu
-
+//upload to game jam site
