@@ -9,6 +9,7 @@ TagManager:
   - BubbleMachine
   - AttackBubble
   - BubbleWall
+  - Rocket
   layers:
   - Default
   - TransparentFX

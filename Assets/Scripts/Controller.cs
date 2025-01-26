@@ -10,7 +10,6 @@ public class Controller : MonoBehaviour
 
     public float horizontal;
     public float vertical;
-    float moveLimiter = 0.7f;
     public float speed = 2f;
     public bool dead = false;
     public bool freeze = false;
@@ -29,11 +28,12 @@ public class Controller : MonoBehaviour
 
     public GameObject bubbleMachine;
     public GameObject BubbleWall;
-    public bool carrying = false;
+    public int carrying = 0;
 
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI attackText;
     public TextMeshProUGUI phaseTwoText;
+    public TextMeshProUGUI wallsText;
 
     public GameObject bubbleMixes;
     public GameObject wall;
@@ -50,6 +50,7 @@ public class Controller : MonoBehaviour
         phase = Phase.One;
         healthText.text = "Health: " + health.ToString();
         attackText.text = "Attack: " + attackDamage.ToString();
+        wallsText.text = "Walls: " + carrying.ToString();
         phaseTwoText.enabled = false;
 
         Invoke(nameof(StartPhaseTwo), 60f);
@@ -77,11 +78,12 @@ public class Controller : MonoBehaviour
         {
             TakeDamage();
         } 
-        else if (collision.gameObject.CompareTag("BubbleMachine") && phase==Phase.One && !carrying)
+        else if (collision.gameObject.CompareTag("BubbleMachine") && phase==Phase.One && carrying < 5)
         {
             //pick up bubble machine
             bubbleMachine = collision.gameObject;
-            carrying = true;
+            carrying += 1;
+            wallsText.text = "Walls: " + carrying.ToString();
             collision.gameObject.SetActive(false);
         }
     }
@@ -120,16 +122,19 @@ public class Controller : MonoBehaviour
         //movement
         if (!freeze)
         {
-             if (horizontal != 0 && vertical != 0) // Check for diagonal movement
-             {
-                horizontal *= moveLimiter;
-                vertical *= moveLimiter;
-             }
              body.velocity = new Vector2(horizontal * speed, vertical * speed);
         }
 
         //aim
         aimPointer.transform.localPosition = new Vector2(aimHorizontal, aimVertical);
+
+        //aimPointer angle
+        if (aimHorizontal != 0 || aimVertical != 0)
+        {
+            float angle = Mathf.Atan2(aimVertical, aimHorizontal) * Mathf.Rad2Deg + 90;
+            aimPointer.transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
+
 
     }
 
@@ -151,13 +156,15 @@ public class Controller : MonoBehaviour
         if (freeze)
             return;
 
-        if (phase == Phase.One && carrying)
+        if (phase == Phase.One && carrying > 0)
         {
             //place bubble machine
-            GameObject newObject = Instantiate(BubbleWall, new Vector2(transform.position.x + aimHorizontal, transform.position.y + aimVertical), Quaternion.identity);
-            carrying = false;
+            GameObject newObject = Instantiate(BubbleWall, new Vector2(transform.position.x + aimHorizontal, transform.position.y + aimVertical), aimPointer.transform.rotation);
+            carrying -= 1;
+            wallsText.text = "Walls: " + carrying.ToString();
 
         }
+
         if (phase == Phase.Two)
         {
             //shoot in direction of aim.
@@ -169,3 +176,13 @@ public class Controller : MonoBehaviour
 
 
 }
+
+
+//collect grenade
+//shoot grendade. grenade moves for 1 seconds and disapear?
+//make attack bubble (increases attack)
+//countdown timer for phase
+//don't spawn walls on top of player
+//nicer background
+// gameover when health is zero and back to main menu
+
