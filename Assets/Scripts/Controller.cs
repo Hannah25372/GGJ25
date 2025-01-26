@@ -41,6 +41,7 @@ public class Controller : MonoBehaviour
     public TextMeshProUGUI phaseTwoText;
     public TextMeshProUGUI gameOverText;
     public TextMeshProUGUI winnerText;
+    public TextMeshProUGUI grenadesText;
 
     public GameObject bubbleMixes;
     public GameObject wall;
@@ -48,6 +49,7 @@ public class Controller : MonoBehaviour
     public GameObject grenade;
 
     public GameObject grenades;
+    public GameObject attackBubbles;
 
     public int grenadeCount = 0;
    
@@ -64,6 +66,7 @@ public class Controller : MonoBehaviour
         healthText.text = "Health: " + health.ToString();
         attackText.text = "Attack: " + attackDamage.ToString();
         wallsText.text = "Walls: " + carrying.ToString();
+        grenadesText.text = "Grenades: " + grenadeCount.ToString();
         phaseTwoText.enabled = false;
         gameOverText.enabled = false;
         winnerText.enabled = false;
@@ -81,6 +84,7 @@ public class Controller : MonoBehaviour
         bubbleMixes.SetActive(false);
         wall.SetActive(false);
         grenades.SetActive(false);
+        attackBubbles.SetActive(false);
     }
     private void Hide()
     {
@@ -107,7 +111,7 @@ public class Controller : MonoBehaviour
         {
             //pick up Rocket
             grenadeCount += 1;
-            //grenadeText.text = "Grenades: " + grenadeCount.ToString();
+            grenadesText.text = "Grenades: " + grenadeCount.ToString();
             Destroy(collision.gameObject);
         }
     }
@@ -225,6 +229,8 @@ public class Controller : MonoBehaviour
         if (phase == Phase.Two && grenadeCount > 0)
         {
             //shoot in direction of aim.
+            grenadeCount -= 1;
+            grenadesText.text = "Grenades: " + grenadeCount.ToString();
             GameObject newGrenade = Instantiate(grenade, new Vector2(transform.position.x + aimHorizontal, transform.position.y + aimVertical), aimPointer.transform.rotation);
             newGrenade.GetComponent<Rigidbody2D>().velocity = (new Vector2(aimHorizontal * bulletSpeed, aimVertical * bulletSpeed));
             Destroy(newGrenade, 2f);
@@ -234,9 +240,6 @@ public class Controller : MonoBehaviour
 
 }
 
-
-
-//make attack bubble (increases attack)
 
 //countdown timer for phase
 
