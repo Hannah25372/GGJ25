@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
@@ -186,10 +187,12 @@ public class Controller : MonoBehaviour
         if (phase == Phase.One && carrying > 0)
         {
             //place bubble machine
-            GameObject newObject = Instantiate(BubbleWall, new Vector2(transform.position.x + aimHorizontal, transform.position.y + aimVertical), aimPointer.transform.rotation);
-            carrying -= 1;
-            wallsText.text = "Walls: " + carrying.ToString();
-
+            if (Math.Sqrt(Math.Pow(aimHorizontal,2)+Math.Pow(aimVertical,2))>0.5)
+            {
+                GameObject newObject = Instantiate(BubbleWall, new Vector2(transform.position.x + aimHorizontal, transform.position.y + aimVertical), aimPointer.transform.rotation);
+                carrying -= 1;
+                wallsText.text = "Walls: " + carrying.ToString();
+            }
         }
 
         if (phase == Phase.Two)
