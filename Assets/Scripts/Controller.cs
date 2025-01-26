@@ -14,7 +14,7 @@ public class Controller : MonoBehaviour
     public bool dead = false;
     public bool freeze = false;
 
-    public int health = 5;
+    public int health = 3;          //IVE SET HEALTH TO 3
     public int attackDamage = 1;
 
     public GameObject bullet;
@@ -38,7 +38,7 @@ public class Controller : MonoBehaviour
 
     public GameObject bubbleMixes;
     public GameObject wall;
-
+   
     enum Phase { One = 1, Two = 2}
     Phase phase;
 
@@ -53,9 +53,10 @@ public class Controller : MonoBehaviour
         attackText.text = "Attack: " + attackDamage.ToString();
         wallsText.text = "Walls: " + carrying.ToString();
         phaseTwoText.enabled = false;
+        gameOverText.enabled = false;
 
-        Invoke(nameof(StartPhaseTwo), 60f);
-        Invoke(nameof(Hide), 65f);
+        Invoke(nameof(StartPhaseTwo), 10f); //FOR TESTING, CHANGE BACK TO 60!
+        Invoke(nameof(Hide), 13f);
     }
 
     private void StartPhaseTwo()
@@ -113,11 +114,8 @@ public class Controller : MonoBehaviour
         {
             health = 0;
             dead = true;
-            phase = Phase.Two;
-            phaseTwoText.enabled = true;
+            gameOverText.enabled = true;
             freeze = true;
-            bubbleMixes.SetActive(false);
-            wall.SetActive(false);
         }
         //update UI
         healthText.text = "Health: " + health.ToString();
