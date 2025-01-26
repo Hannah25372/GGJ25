@@ -156,6 +156,11 @@ public class Controller : MonoBehaviour
         healthText.text = "Health: " + health.ToString();
     }
 
+    private void Update()
+    {
+        
+    }
+
     void FixedUpdate()
     {
         //movement
