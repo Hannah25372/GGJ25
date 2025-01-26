@@ -72,8 +72,8 @@ public class Controller : MonoBehaviour
         winnerText.enabled = false;
         shadowWall.SetActive(false);
 
-        Invoke(nameof(StartPhaseTwo), 90f); //FOR TESTING, CHANGE BACK TO 60!
-        Invoke(nameof(Hide), 93f);
+        Invoke(nameof(StartPhaseTwo), 60f); //FOR TESTING, CHANGE BACK TO 60!
+        Invoke(nameof(Hide), 63f);
     }
 
     private void StartPhaseTwo()
