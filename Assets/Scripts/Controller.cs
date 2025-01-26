@@ -38,6 +38,9 @@ public class Controller : MonoBehaviour
 
     public GameObject bubbleMixes;
     public GameObject wall;
+    public GameObject grenade;
+
+    public int grenadeCount = 0;
    
     enum Phase { One = 1, Two = 2}
     Phase phase;
@@ -55,8 +58,8 @@ public class Controller : MonoBehaviour
         phaseTwoText.enabled = false;
         gameOverText.enabled = false;
 
-        Invoke(nameof(StartPhaseTwo), 10f); //FOR TESTING, CHANGE BACK TO 60!
-        Invoke(nameof(Hide), 13f);
+        Invoke(nameof(StartPhaseTwo), 60f); //FOR TESTING, CHANGE BACK TO 60!
+        Invoke(nameof(Hide), 65f);
     }
 
     private void StartPhaseTwo()
@@ -87,6 +90,13 @@ public class Controller : MonoBehaviour
             carrying += 1;
             wallsText.text = "Walls: " + carrying.ToString();
             collision.gameObject.SetActive(false);
+        }
+        else if (collision.gameObject.CompareTag("Rocket") && phase == Phase.One)
+        {
+            //pick up Rocket
+            grenadeCount += 1;
+            //grenadeText.text = "Grenades: " + grenadeCount.ToString();
+            Destroy(gameObject);
         }
     }
 
@@ -178,6 +188,17 @@ public class Controller : MonoBehaviour
         }     
     }
 
+    private void On(InputValue value)
+    {
+        if (phase == Phase.Two && grenadeCount > 0)
+        {
+            //shoot in direction of aim.
+            GameObject newGrenade = Instantiate(grenade, new Vector2(transform.position.x + aimHorizontal, transform.position.y + aimVertical), aimPointer.transform.rotation);
+            newGrenade.GetComponent<Rigidbody2D>().velocity = (new Vector2(aimHorizontal * bulletSpeed, aimVertical * bulletSpeed));
+            Destroy(newGrenade, 2f);
+        }
+    }
+
 
 }
 
@@ -193,6 +214,6 @@ public class Controller : MonoBehaviour
 
 //nicer background
 
-// gameover when health is zero and back to main menu
+//     gameover when health is zero and back to main menu
 
 //upload to game jam site
