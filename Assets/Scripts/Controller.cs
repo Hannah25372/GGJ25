@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 using TMPro;
 
+public enum Phase { One = 1, Two = 2 }
+
 public class Controller : MonoBehaviour
 {
     Rigidbody2D body;
@@ -40,10 +42,12 @@ public class Controller : MonoBehaviour
     public GameObject wall;
     public GameObject grenade;
 
+    public GameObject grenades;
+
     public int grenadeCount = 0;
    
-    enum Phase { One = 1, Two = 2}
-    Phase phase;
+   
+    public Phase phase;
 
     // Start is called before the first frame update
     void Start()
@@ -69,6 +73,7 @@ public class Controller : MonoBehaviour
         freeze = true;
         bubbleMixes.SetActive(false);
         wall.SetActive(false);
+        grenades.SetActive(false);
     }
     private void Hide()
     {
@@ -96,7 +101,7 @@ public class Controller : MonoBehaviour
             //pick up Rocket
             grenadeCount += 1;
             //grenadeText.text = "Grenades: " + grenadeCount.ToString();
-            Destroy(gameObject);
+            Destroy(collision.gameObject);
         }
     }
 
@@ -188,7 +193,7 @@ public class Controller : MonoBehaviour
         }     
     }
 
-    private void On(InputValue value)
+    private void OnThrow(InputValue value)
     {
         if (phase == Phase.Two && grenadeCount > 0)
         {
@@ -203,17 +208,13 @@ public class Controller : MonoBehaviour
 }
 
 
-//collect grenade
-//shoot grendade. grenade moves for 1 seconds and disapear?
 
 //make attack bubble (increases attack)
 
 //countdown timer for phase
 
-//don't spawn walls on top of player
 
 //nicer background
 
-//     gameover when health is zero and back to main menu
 
 //upload to game jam site
