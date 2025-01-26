@@ -29,7 +29,7 @@ public class Controller : MonoBehaviour
     public GameObject aimPointer;
 
     public Controller opponent;
-    public string name;
+    public string playerName;
 
     public GameObject bubbleMachine;
     public GameObject BubbleWall;
@@ -135,7 +135,7 @@ public class Controller : MonoBehaviour
         {
             health = 0;
             dead = true;
-            winnerText.text = name + " WINS!";
+            winnerText.text = playerName + " WINS!";
             gameOverText.enabled = true;
             winnerText.enabled = true;
             freeze = true;
