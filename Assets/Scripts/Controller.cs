@@ -44,6 +44,7 @@ public class Controller : MonoBehaviour
 
     public GameObject bubbleMixes;
     public GameObject wall;
+    public GameObject shadowWall;
     public GameObject grenade;
 
     public GameObject grenades;
@@ -66,6 +67,7 @@ public class Controller : MonoBehaviour
         phaseTwoText.enabled = false;
         gameOverText.enabled = false;
         winnerText.enabled = false;
+        shadowWall.SetActive(false);
 
         Invoke(nameof(StartPhaseTwo), 10f); //FOR TESTING, CHANGE BACK TO 60!
         Invoke(nameof(Hide), 13f);
@@ -168,7 +170,16 @@ public class Controller : MonoBehaviour
             aimPointer.transform.rotation = Quaternion.Euler(0, 0, angle);
         }
 
-
+        //shadow wall to see where you'll place a wall
+        if (phase == Phase.One && carrying > 0 && Math.Sqrt(Math.Pow(aimHorizontal, 2) + Math.Pow(aimVertical, 2)) > 0.5)
+        {
+            shadowWall.SetActive(true);
+            shadowWall.transform.localPosition = new Vector2(aimHorizontal, aimVertical);
+            shadowWall.transform.rotation = aimPointer.transform.rotation;
+        }
+        else {
+            shadowWall.SetActive(false);
+        }
     }
 
 
@@ -191,8 +202,8 @@ public class Controller : MonoBehaviour
 
         if (phase == Phase.One && carrying > 0)
         {
-            //place bubble machine
-            if (Math.Sqrt(Math.Pow(aimHorizontal,2)+Math.Pow(aimVertical,2))>0.5)
+            //place wall
+            if (Math.Sqrt(Math.Pow(aimHorizontal,2)+Math.Pow(aimVertical,2))>0.5) //this makes them not place on top of themself
             {
                 GameObject newObject = Instantiate(BubbleWall, new Vector2(transform.position.x + aimHorizontal, transform.position.y + aimVertical), aimPointer.transform.rotation);
                 carrying -= 1;
@@ -231,6 +242,5 @@ public class Controller : MonoBehaviour
 
 
 //nicer background
-
 
 //upload to game jam site
