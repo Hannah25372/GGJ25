@@ -186,9 +186,15 @@ public class Controller : MonoBehaviour
 
 //collect grenade
 //shoot grendade. grenade moves for 1 seconds and disapear?
+
 //make attack bubble (increases attack)
+
 //countdown timer for phase
+
 //don't spawn walls on top of player
+
 //nicer background
+
 // gameover when health is zero and back to main menu
+
 //upload to game jam site

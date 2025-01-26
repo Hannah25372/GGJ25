@@ -1915,12 +1915,13 @@ MonoBehaviour:
   aimPointer: {fileID: 1605889856}
   opponent: {fileID: 793625733}
   bubbleMachine: {fileID: 0}
-  BubbleWall: {fileID: 2588904459582423956, guid: 10ae3d25cf6dd7e428fa0d2180aa48c0, type: 3}
+  BubbleWall: {fileID: 2588904459582423956, guid: 02201f00a451a974eaae7ed0f2128563, type: 3}
   carrying: 0
   healthText: {fileID: 1600343598}
   attackText: {fileID: 1115457103}
+  wallsText: {fileID: 0}
   phaseTwoText: {fileID: 1961482815}
-  wallsText: {fileID: 1654338454}
+  gameOverText: {fileID: 0}
   bubbleMixes: {fileID: 703382317}
   wall: {fileID: 802833068}
 --- !u!4 &365519888 stripped
@@ -4370,8 +4371,9 @@ MonoBehaviour:
   carrying: 0
   healthText: {fileID: 869036040}
   attackText: {fileID: 1830204174}
+  wallsText: {fileID: 0}
   phaseTwoText: {fileID: 1961482815}
-  wallsText: {fileID: 1975382662}
+  gameOverText: {fileID: 0}
   bubbleMixes: {fileID: 703382317}
   wall: {fileID: 802833068}
 --- !u!68 &793625734
