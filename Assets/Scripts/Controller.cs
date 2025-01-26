@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public enum Phase { One = 1, Two = 2 }
@@ -27,6 +29,7 @@ public class Controller : MonoBehaviour
     public GameObject aimPointer;
 
     public Controller opponent;
+    public string name;
 
     public GameObject bubbleMachine;
     public GameObject BubbleWall;
@@ -37,6 +40,7 @@ public class Controller : MonoBehaviour
     public TextMeshProUGUI wallsText;
     public TextMeshProUGUI phaseTwoText;
     public TextMeshProUGUI gameOverText;
+    public TextMeshProUGUI winnerText;
 
     public GameObject bubbleMixes;
     public GameObject wall;
@@ -61,9 +65,10 @@ public class Controller : MonoBehaviour
         wallsText.text = "Walls: " + carrying.ToString();
         phaseTwoText.enabled = false;
         gameOverText.enabled = false;
+        winnerText.enabled = false;
 
-        Invoke(nameof(StartPhaseTwo), 60f); //FOR TESTING, CHANGE BACK TO 60!
-        Invoke(nameof(Hide), 65f);
+        Invoke(nameof(StartPhaseTwo), 10f); //FOR TESTING, CHANGE BACK TO 60!
+        Invoke(nameof(Hide), 13f);
     }
 
     private void StartPhaseTwo()
@@ -121,6 +126,7 @@ public class Controller : MonoBehaviour
         }
     }
 
+
     private void TakeDamage()
     {
         health -= opponent.attackDamage;
@@ -129,8 +135,16 @@ public class Controller : MonoBehaviour
         {
             health = 0;
             dead = true;
+            winnerText.text = name + " WINS!";
             gameOverText.enabled = true;
+            winnerText.enabled = true;
             freeze = true;
+            IEnumerator loadMenu(float time)
+            {
+                yield return new WaitForSeconds(time);
+                SceneManager.LoadScene("Menu");
+            }
+            StartCoroutine(loadMenu(3));
         }
         //update UI
         healthText.text = "Health: " + health.ToString();
@@ -178,10 +192,12 @@ public class Controller : MonoBehaviour
         if (phase == Phase.One && carrying > 0)
         {
             //place bubble machine
-            GameObject newObject = Instantiate(BubbleWall, new Vector2(transform.position.x + aimHorizontal, transform.position.y + aimVertical), aimPointer.transform.rotation);
-            carrying -= 1;
-            wallsText.text = "Walls: " + carrying.ToString();
-
+            if (Math.Sqrt(Math.Pow(aimHorizontal,2)+Math.Pow(aimVertical,2))>0.5)
+            {
+                GameObject newObject = Instantiate(BubbleWall, new Vector2(transform.position.x + aimHorizontal, transform.position.y + aimVertical), aimPointer.transform.rotation);
+                carrying -= 1;
+                wallsText.text = "Walls: " + carrying.ToString();
+            }
         }
 
         if (phase == Phase.Two)
